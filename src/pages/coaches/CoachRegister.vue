@@ -1,0 +1,1 @@
+<template>regiter works</template>
