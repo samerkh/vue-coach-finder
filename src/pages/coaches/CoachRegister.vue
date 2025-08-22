@@ -1,1 +1,1 @@
-<template>regiter works</template>
+<template>Register works</template>
