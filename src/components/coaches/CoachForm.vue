@@ -37,7 +37,7 @@
 
 <script>
 export default {
-  emits: ['submit'],
+  emits: ['submit-data'],
   data() {
     return {
       firstName: '',
@@ -56,7 +56,7 @@ export default {
         hourlyRate: this.hourlyRate,
         areas: this.areas,
       };
-      console.log(formData);
+      this.$emit('submit-data', formData);
     },
   },
 };
