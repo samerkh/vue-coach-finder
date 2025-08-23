@@ -2,6 +2,7 @@ export default {
   namespaced: true,
   state() {
     return {
+      userIsCoach: false,
       coaches: [
         {
           id: 'c1',
@@ -31,19 +32,26 @@ export default {
     hasCoaches(state) {
       return state.coaches && state.coaches.length;
     },
+    isCoach(state) {
+      return state.userIsCoach;
+    },
   },
   mutations: {
     registerCoach(state, payload) {
       state.coaches.push(payload);
     },
+    setUserIsCoach(state) {
+      state.userIsCoach = true;
+    },
   },
   actions: {
     registerCoach(context, data) {
       const newCoach = {
-        id: 'c3',
+        id: new Date().toISOString(),
         ...data,
       };
       context.commit('registerCoach', newCoach);
+      context.commit('setUserIsCoach');
     },
   },
 };
