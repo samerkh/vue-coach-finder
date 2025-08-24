@@ -1,62 +1,124 @@
 <template>
-  <form @submit.prevent="submitForm">
+  <Form @submit="submitForm" :validation-schema="validationSchema">
     <div class="form-control">
-      <label for="first">First Name</label>
-      <input type="text" id="first" v-model.trim="firstName" />
+      <label for="firstName">First Name</label>
+      <Field
+        name="firstName"
+        type="text"
+        id="firstName"
+        v-model.trim="formValues.firstName"
+      />
+      <ErrorMessage name="firstName" />
     </div>
     <div class="form-control">
-      <label for="last">Last Name</label>
-      <input type="text" id="last" v-model.trim="lastName" />
+      <label for="lastName">Last Name</label>
+      <Field
+        name="lastName"
+        type="text"
+        id="lastName"
+        v-model.trim="formValues.lastName"
+      />
+      <ErrorMessage name="lastName" />
     </div>
     <div class="form-control">
-      <label for="desc">Description</label>
-      <textarea id="desc" rows="3" v-model.trim="description"></textarea>
+      <label for="description">Description</label>
+      <Field
+        as="textarea"
+        name="description"
+        id="description"
+        rows="3"
+        v-model.trim="formValues.description"
+      ></Field>
+      <ErrorMessage name="description" />
     </div>
     <div class="form-control">
-      <label for="rate">Hourly Rate</label>
-      <input type="number" id="rate" v-model="hourlyRate" />
+      <label for="hourlyRate">Hourly Rate</label>
+      <Field
+        name="hourlyRate"
+        type="number"
+        id="hourlyRate"
+        v-model="formValues.hourlyRate"
+      />
+      <ErrorMessage name="hourlyRate" />
     </div>
     <div class="form-control">
       <h3>Areas of Expertise</h3>
       <div>
-        <input type="checkbox" id="frontend" value="frontend" v-model="areas" />
+        <Field
+          name="areas"
+          type="checkbox"
+          id="frontend"
+          value="frontend"
+          v-model="formValues.areas"
+        />
         <label for="frontend">Frontend</label>
       </div>
       <div>
-        <input type="checkbox" id="backend" value="backend" v-model="areas" />
+        <Field
+          name="areas"
+          type="checkbox"
+          id="backend"
+          value="backend"
+          v-model="formValues.areas"
+        />
         <label for="backend">Backend</label>
       </div>
       <div>
-        <input type="checkbox" id="career" value="career" v-model="areas" />
+        <Field
+          name="areas"
+          type="checkbox"
+          id="career"
+          value="career"
+          v-model="formValues.areas"
+        />
         <label for="career">Career</label>
       </div>
+      <ErrorMessage name="areas" />
     </div>
     <base-button>Register</base-button>
-  </form>
+  </Form>
 </template>
 
 <script>
+import { toTypedSchema } from '@vee-validate/zod';
+import { ErrorMessage, Field, Form } from 'vee-validate';
+import * as z from 'zod';
+
+const schema = z.object({
+  firstName: z.string().min(2, 'First name must be at least 2 characters long'),
+  lastName: z.string().min(2, 'Last name must be at least 2 characters long'),
+  description: z
+    .string()
+    .min(10, 'Description must be at least 10 characters long'),
+  hourlyRate: z.number().min(1, 'Hourly rate must be greater than zero'),
+  areas: z
+    .array(z.enum(['frontend', 'backend', 'career']))
+    .min(1, 'Select at least one area of expertise'),
+});
+
 export default {
   emits: ['submit-data'],
+  components: {
+    Form,
+    Field,
+    ErrorMessage,
+  },
+
   data() {
     return {
-      firstName: '',
-      lastName: '',
-      description: '',
-      hourlyRate: null,
-      areas: [],
+      formValues: {
+        firstName: '',
+        lastName: '',
+        description: '',
+        hourlyRate: null,
+        areas: [],
+      },
+      validationSchema: toTypedSchema(schema),
     };
   },
   methods: {
-    submitForm() {
-      const formData = {
-        firstName: this.firstName,
-        lastName: this.lastName,
-        description: this.description,
-        hourlyRate: this.hourlyRate,
-        areas: this.areas,
-      };
-      this.$emit('submit-data', formData);
+    submitForm(values) {
+      this.$emit('submit-data', values);
     },
   },
 };
