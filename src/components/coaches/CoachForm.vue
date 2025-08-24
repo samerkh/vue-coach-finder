@@ -1,5 +1,9 @@
 <template>
-  <Form @submit="submitForm" :validation-schema="validationSchema">
+  <Form
+    @submit="submitForm"
+    :validation-schema="validationSchema"
+    :initial-values="initialValues"
+  >
     <div class="form-control">
       <label for="firstName">First Name</label>
       <Field name="firstName" type="text" validate-on-input />
@@ -71,6 +75,13 @@ export default {
     });
     return {
       validationSchema: toTypedSchema(schema),
+      initialValues: {
+        firstName: '',
+        lastName: '',
+        description: '',
+        hourlyRate: null,
+        areas: [],
+      },
     };
   },
 
