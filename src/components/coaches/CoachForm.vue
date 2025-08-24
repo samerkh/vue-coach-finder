@@ -11,17 +11,17 @@
     </div>
     <div class="form-control">
       <label for="lastName">Last Name</label>
-      <Field name="lastName" type="text" id="lastName" />
+      <Field name="lastName" type="text" id="lastName" validate-on-input />
       <ErrorMessage name="lastName" class="invalid" />
     </div>
     <div class="form-control">
       <label for="description">Description</label>
-      <Field as="textarea" name="description" rows="3"></Field>
+      <Field as="textarea" name="description" rows="3" validate-on-input />
       <ErrorMessage name="description" class="invalid" />
     </div>
     <div class="form-control">
       <label for="hourlyRate">Hourly Rate</label>
-      <Field name="hourlyRate" type="number" />
+      <Field name="hourlyRate" type="number" validate-on-input />
       <ErrorMessage name="hourlyRate" class="invalid" />
     </div>
     <div class="form-control">
@@ -68,7 +68,9 @@ export default {
       description: z
         .string()
         .min(10, 'Description must be at least 10 characters long'),
-      hourlyRate: z.number().min(1, 'Hourly rate must be greater than zero'),
+      hourlyRate: z
+        .number({ message: 'Please enter a number' })
+        .min(5, 'Hourly rate must be greater than 5'),
       areas: z
         .array(z.enum(['frontend', 'backend', 'career']))
         .min(1, 'Select at least one area of expertise'),
