@@ -2,78 +2,39 @@
   <Form @submit="submitForm" :validation-schema="validationSchema">
     <div class="form-control">
       <label for="firstName">First Name</label>
-      <Field
-        name="firstName"
-        type="text"
-        id="firstName"
-        v-model.trim="formValues.firstName"
-      />
-      <ErrorMessage name="firstName" />
+      <Field name="firstName" type="text" validate-on-input />
+      <ErrorMessage name="firstName" class="invalid" />
     </div>
     <div class="form-control">
       <label for="lastName">Last Name</label>
-      <Field
-        name="lastName"
-        type="text"
-        id="lastName"
-        v-model.trim="formValues.lastName"
-      />
-      <ErrorMessage name="lastName" />
+      <Field name="lastName" type="text" id="lastName" />
+      <ErrorMessage name="lastName" class="invalid" />
     </div>
     <div class="form-control">
       <label for="description">Description</label>
-      <Field
-        as="textarea"
-        name="description"
-        id="description"
-        rows="3"
-        v-model.trim="formValues.description"
-      ></Field>
-      <ErrorMessage name="description" />
+      <Field as="textarea" name="description" rows="3"></Field>
+      <ErrorMessage name="description" class="invalid" />
     </div>
     <div class="form-control">
       <label for="hourlyRate">Hourly Rate</label>
-      <Field
-        name="hourlyRate"
-        type="number"
-        id="hourlyRate"
-        v-model="formValues.hourlyRate"
-      />
-      <ErrorMessage name="hourlyRate" />
+      <Field name="hourlyRate" type="number" />
+      <ErrorMessage name="hourlyRate" class="invalid" />
     </div>
     <div class="form-control">
       <h3>Areas of Expertise</h3>
       <div>
-        <Field
-          name="areas"
-          type="checkbox"
-          id="frontend"
-          value="frontend"
-          v-model="formValues.areas"
-        />
+        <Field name="areas" type="checkbox" value="frontend" />
         <label for="frontend">Frontend</label>
       </div>
       <div>
-        <Field
-          name="areas"
-          type="checkbox"
-          id="backend"
-          value="backend"
-          v-model="formValues.areas"
-        />
+        <Field name="areas" type="checkbox" value="backend" />
         <label for="backend">Backend</label>
       </div>
       <div>
-        <Field
-          name="areas"
-          type="checkbox"
-          id="career"
-          value="career"
-          v-model="formValues.areas"
-        />
+        <Field name="areas" type="checkbox" value="career" />
         <label for="career">Career</label>
       </div>
-      <ErrorMessage name="areas" />
+      <ErrorMessage name="areas" class="invalid" />
     </div>
     <base-button>Register</base-button>
   </Form>
@@ -84,18 +45,6 @@ import { toTypedSchema } from '@vee-validate/zod';
 import { ErrorMessage, Field, Form } from 'vee-validate';
 import * as z from 'zod';
 
-const schema = z.object({
-  firstName: z.string().min(2, 'First name must be at least 2 characters long'),
-  lastName: z.string().min(2, 'Last name must be at least 2 characters long'),
-  description: z
-    .string()
-    .min(10, 'Description must be at least 10 characters long'),
-  hourlyRate: z.number().min(1, 'Hourly rate must be greater than zero'),
-  areas: z
-    .array(z.enum(['frontend', 'backend', 'career']))
-    .min(1, 'Select at least one area of expertise'),
-});
-
 export default {
   emits: ['submit-data'],
   components: {
@@ -105,17 +54,26 @@ export default {
   },
 
   data() {
+    const schema = z.object({
+      firstName: z
+        .string({ required_error: 'First name is required' })
+        .min(2, 'First name must be at least 2 characters long'),
+      lastName: z
+        .string()
+        .min(2, 'Last name must be at least 2 characters long'),
+      description: z
+        .string()
+        .min(10, 'Description must be at least 10 characters long'),
+      hourlyRate: z.number().min(1, 'Hourly rate must be greater than zero'),
+      areas: z
+        .array(z.enum(['frontend', 'backend', 'career']))
+        .min(1, 'Select at least one area of expertise'),
+    });
     return {
-      formValues: {
-        firstName: '',
-        lastName: '',
-        description: '',
-        hourlyRate: null,
-        areas: [],
-      },
       validationSchema: toTypedSchema(schema),
     };
   },
+
   methods: {
     submitForm(values) {
       this.$emit('submit-data', values);
@@ -171,6 +129,7 @@ h3 {
   font-size: 1rem;
 }
 
+.invalid,
 .invalid label {
   color: red;
 }
