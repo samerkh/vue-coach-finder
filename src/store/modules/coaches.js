@@ -10,6 +10,7 @@ export default {
       userIsCoach: true,
       activeCoach: null,
       coaches: [],
+      lastFetched: null,
     };
   },
   getters: {
@@ -25,6 +26,12 @@ export default {
     activeCoach(state) {
       return state.activeCoach;
     },
+    shouldUpdate({ lastFetched }) {
+      if (!lastFetched) return true;
+      const currentTime = new Date().getTime();
+
+      return (currentTime - lastFetched) / 1000 > 5;
+    },
   },
   mutations: {
     setCoaches(state, payload) {
@@ -38,6 +45,9 @@ export default {
     },
     setActiveCoach(state, payload) {
       state.activeCoach = payload;
+    },
+    setLastFetched(state) {
+      state.lastFetched = new Date().getTime();
     },
   },
   actions: {
@@ -53,7 +63,9 @@ export default {
       });
       context.commit('setUserIsCoach');
     },
-    async loadCoaches(context) {
+    async loadCoaches(context, forceUpdate) {
+      if (!forceUpdate && !context.getters.shouldUpdate) return;
+
       const url = `${baseURL}/coaches.json`;
       const res = await axios.get(url);
       const coachesList = Object.entries(res.data).map(([id, data]) => ({
@@ -61,6 +73,7 @@ export default {
         ...data,
       }));
       context.commit('setCoaches', coachesList);
+      context.commit('setLastFetched');
     },
     async loadCoachDetails(context, coachId) {
       const url = `${baseURL}/coaches/${coachId}.json`;
