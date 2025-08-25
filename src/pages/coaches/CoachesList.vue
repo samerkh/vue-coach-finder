@@ -1,4 +1,12 @@
 <template>
+  <base-dialog
+    v-if="error"
+    :show="!!error"
+    :title="error.name"
+    @close="handleError"
+  >
+    <p>{{ error.message }}</p>
+  </base-dialog>
   <section>
     <coach-filter @change-filter="setFilter"></coach-filter>
   </section>
@@ -40,6 +48,7 @@ export default {
   data() {
     return {
       isLoading: false,
+      error: null,
       filters: {
         frontend: true,
         backend: true,
@@ -78,8 +87,15 @@ export default {
     },
     async loadCoaches() {
       this.isLoading = true;
-      await this.$store.dispatch('coaches/loadCoaches');
+      try {
+        await this.$store.dispatch('coaches/loadCoaches');
+      } catch (error) {
+        this.error = error;
+      }
       this.isLoading = false;
+    },
+    handleError() {
+      this.error = null;
     },
   },
 
