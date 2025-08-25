@@ -1,10 +1,5 @@
 <template>
-  <base-dialog
-    v-if="error"
-    :show="!!error"
-    :title="error.name"
-    @close="handleError"
-  >
+  <base-dialog :show="!!error" :title="error?.name" @close="handleError">
     <p>{{ error.message }}</p>
   </base-dialog>
   <section>
