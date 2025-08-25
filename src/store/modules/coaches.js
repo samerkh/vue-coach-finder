@@ -1,3 +1,8 @@
+import axios from 'axios';
+
+const baseURL =
+  'https://find-coach-3000-default-rtdb.europe-west1.firebasedatabase.app';
+
 export default {
   namespaced: true,
   state() {
@@ -45,12 +50,16 @@ export default {
     },
   },
   actions: {
-    registerCoach(context, data) {
-      const newCoach = {
-        id: context.rootGetters.userId,
-        ...data,
-      };
-      context.commit('registerCoach', newCoach);
+    async registerCoach(context, coachData) {
+      const userId = context.rootGetters.userId;
+      const url = `${baseURL}/coaches/${userId}.json`;
+
+      const res = await axios.put(url, coachData);
+
+      context.commit('registerCoach', {
+        ...res.data,
+        id: userId,
+      });
       context.commit('setUserIsCoach');
     },
   },
