@@ -47,7 +47,7 @@ export default {
   actions: {
     registerCoach(context, data) {
       const newCoach = {
-        id: new Date().toISOString(),
+        id: context.rootGetters.userId,
         ...data,
       };
       context.commit('registerCoach', newCoach);

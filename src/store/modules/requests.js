@@ -6,14 +6,17 @@ export default {
     };
   },
   getters: {
-    requests(state) {
-      return state.requests;
+    requests(state, _, _2, rootGetters) {
+      const { userId } = rootGetters;
+      return state.requests.filter((req) => req.coachId == userId);
+    },
+    hasRequests(_, getters) {
+      return getters.requests && getters.requests.length;
     },
   },
   mutations: {
     addRequest(state, payload) {
       state.requests.push(payload);
-      console.log(state.requests);
     },
   },
   actions: {
