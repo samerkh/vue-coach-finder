@@ -6,36 +6,47 @@
   >
     <div class="form-control">
       <label for="firstName">First Name</label>
-      <Field name="firstName" type="text" validate-on-input />
+      <Field id="firstName" name="firstName" type="text" validate-on-input />
       <ErrorMessage name="firstName" class="invalid" />
     </div>
     <div class="form-control">
       <label for="lastName">Last Name</label>
-      <Field name="lastName" type="text" id="lastName" validate-on-input />
+      <Field id="lastName" name="lastName" type="text" validate-on-input />
       <ErrorMessage name="lastName" class="invalid" />
     </div>
     <div class="form-control">
       <label for="description">Description</label>
-      <Field as="textarea" name="description" rows="3" validate-on-input />
+      <Field
+        as="description"
+        id="firstName"
+        name="description"
+        rows="3"
+        validate-on-input
+      />
       <ErrorMessage name="description" class="invalid" />
     </div>
     <div class="form-control">
       <label for="hourlyRate">Hourly Rate</label>
-      <Field name="hourlyRate" type="number" validate-on-input />
+      <Field
+        id="hourlyRate"
+        name="hourlyRate"
+        type="number"
+        validate-on-input
+      />
       <ErrorMessage name="hourlyRate" class="invalid" />
     </div>
     <div class="form-control">
       <h3>Areas of Expertise</h3>
       <div>
-        <Field name="areas" type="checkbox" value="frontend" />
+        <Field id="frontend" name="areas" type="checkbox" value="frontend" />
         <label for="frontend">Frontend</label>
       </div>
       <div>
-        <Field name="areas" type="checkbox" value="backend" />
+        <Field id="backend" name="areas" type="checkbox" value="backend" />
         <label for="backend">Backend</label>
       </div>
       <div>
-        <Field name="areas" type="checkbox" value="career" />
+        <Field id="career" name="areas" type="checkbox" value="career" />
         <label for="career">Career</label>
       </div>
       <ErrorMessage name="areas" class="invalid" />

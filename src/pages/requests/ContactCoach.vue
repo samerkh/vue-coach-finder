@@ -6,13 +6,14 @@
   >
     <div class="form-control">
       <label for="email">Email</label>
-      <Field name="email" type="email" validate-on-input />
+      <Field id="email" name="email" type="email" validate-on-input />
       <ErrorMessage name="email" class="errors" />
     </div>
     <div class="form-control">
       <label for="message">Message</label>
       <Field
         as="textarea"
+        id="message"
         rows="5"
         name="message"
         type="text"
