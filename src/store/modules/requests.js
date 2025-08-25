@@ -1,3 +1,8 @@
+import axios from 'axios';
+
+const baseURL =
+  'https://find-coach-3000-default-rtdb.europe-west1.firebasedatabase.app';
+
 export default {
   namespaced: true,
   state() {
@@ -6,9 +11,8 @@ export default {
     };
   },
   getters: {
-    requests(state, _, _2, rootGetters) {
-      const { userId } = rootGetters;
-      return state.requests.filter((req) => req.coachId == userId);
+    requests(state) {
+      return state.requests;
     },
     hasRequests(_, getters) {
       return getters.requests && getters.requests.length;
@@ -18,14 +22,32 @@ export default {
     addRequest(state, payload) {
       state.requests.push(payload);
     },
+    setRequests(state, payload) {
+      state.requests = payload;
+    },
   },
   actions: {
-    contactCoach(context, payload) {
-      const newRequest = {
-        id: new Date().toISOString(),
-        ...payload,
+    async loadRequests(context) {
+      const { userId } = context.rootGetters;
+      const url = `${baseURL}/coaches/${userId}/requests.json`;
+      const res = await axios.get(url);
+
+      const requests = Object.entries(res.data ?? []).map(([id, data]) => ({
+        id,
+        ...data,
+      }));
+      context.commit('setRequests', requests);
+    },
+    async contactCoach(context, payload) {
+      const { coachId } = payload;
+      const requestData = {
+        email: payload.email,
+        message: payload.message,
       };
-      context.commit('addRequest', newRequest);
+      const url = `${baseURL}/coaches/${coachId}/requests.json`;
+      const res = await axios.post(url, requestData);
+      requestData.id = res.data.name;
+      context.commit('addRequest', requestData);
     },
   },
 };

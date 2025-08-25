@@ -7,27 +7,9 @@ export default {
   namespaced: true,
   state() {
     return {
-      userIsCoach: false,
-      coaches: [
-        // {
-        //   id: 'c1',
-        //   firstName: 'Maximilian',
-        //   lastName: 'Schwarzmüller',
-        //   areas: ['frontend', 'backend', 'career'],
-        //   description:
-        //     "I'm Maximilian and I've worked as a freelance web developer for years. Let me help you become a developer as well!",
-        //   hourlyRate: 30,
-        // },
-        // {
-        //   id: 'c2',
-        //   firstName: 'Julie',
-        //   lastName: 'Jones',
-        //   areas: ['frontend', 'career'],
-        //   description:
-        //     'I am Julie and as a senior developer in a big tech company, I can help you get your first job or progress in your current role.',
-        //   hourlyRate: 30,
-        // },
-      ],
+      userIsCoach: true,
+      activeCoach: null,
+      coaches: [],
     };
   },
   getters: {
@@ -40,6 +22,9 @@ export default {
     isCoach(state) {
       return state.userIsCoach;
     },
+    activeCoach(state) {
+      return state.activeCoach;
+    },
   },
   mutations: {
     setCoaches(state, payload) {
@@ -50,6 +35,9 @@ export default {
     },
     setUserIsCoach(state) {
       state.userIsCoach = true;
+    },
+    setActiveCoach(state, payload) {
+      state.activeCoach = payload;
     },
   },
   actions: {
@@ -73,6 +61,11 @@ export default {
         ...data,
       }));
       context.commit('setCoaches', coachesList);
+    },
+    async loadCoachDetails(context, coachId) {
+      const url = `${baseURL}/coaches/${coachId}.json`;
+      const res = await axios.get(url);
+      context.commit('setActiveCoach', res.data);
     },
   },
 };
