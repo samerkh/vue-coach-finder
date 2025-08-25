@@ -17,7 +17,7 @@
     <div class="form-control">
       <label for="description">Description</label>
       <Field
-        as="description"
+        as="textarea"
         id="firstName"
         name="description"
         rows="3"

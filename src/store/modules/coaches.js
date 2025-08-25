@@ -7,7 +7,7 @@ export default {
   namespaced: true,
   state() {
     return {
-      userIsCoach: true,
+      userIsCoach: false,
       activeCoach: null,
       coaches: [],
       lastFetched: null,

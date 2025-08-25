@@ -29,7 +29,7 @@ export default {
   actions: {
     async loadRequests(context) {
       const { userId } = context.rootGetters;
-      const url = `${baseURL}/coaches/${userId}/requests.json`;
+      const url = `${baseURL}/requests/${userId}.json`;
       const res = await axios.get(url);
 
       const requests = Object.entries(res.data ?? []).map(([id, data]) => ({
@@ -44,7 +44,7 @@ export default {
         email: payload.email,
         message: payload.message,
       };
-      const url = `${baseURL}/coaches/${coachId}/requests.json`;
+      const url = `${baseURL}/requests/${coachId}.json`;
       const res = await axios.post(url, requestData);
       requestData.id = res.data.name;
       context.commit('addRequest', requestData);
