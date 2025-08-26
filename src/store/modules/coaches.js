@@ -53,7 +53,8 @@ export default {
   actions: {
     async registerCoach(context, coachData) {
       const userId = context.rootGetters.userId;
-      const url = `${baseURL}/coaches/${userId}.json`;
+      const { token } = context.rootGetters;
+      const url = `${baseURL}/coaches/${userId}.json?auth=${token}`;
 
       const res = await axios.put(url, coachData);
 

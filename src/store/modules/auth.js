@@ -14,10 +14,15 @@ export default {
     userId(state) {
       return state.userId;
     },
+    token(state) {
+      return state.token;
+    },
   },
   mutations: {
     setUser(state, payload) {
-      state = payload;
+      state.userId = payload.userId;
+      state.token = payload.token;
+      state.tokenExpiration = payload.tokenExpiration;
     },
   },
   actions: {
@@ -27,7 +32,7 @@ export default {
       const authUrl = `${url}:${action}?key=${apiKey}`;
       const res = await axios.post(authUrl, {
         ...payload.data,
-        returnSecureToke: true,
+        returnSecureToken: true,
       });
       ctx.commit('setUser', {
         token: res.data.idToken,

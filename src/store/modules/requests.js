@@ -29,7 +29,8 @@ export default {
   actions: {
     async loadRequests(context) {
       const { userId } = context.rootGetters;
-      const url = `${baseURL}/requests/${userId}.json`;
+      const { token } = context.rootGetters;
+      const url = `${baseURL}/requests/${userId}.json?auth=${token}`;
       const res = await axios.get(url);
 
       const requests = Object.entries(res.data ?? []).map(([id, data]) => ({
