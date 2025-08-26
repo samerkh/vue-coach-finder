@@ -8,7 +8,10 @@ this is a simple project to practice my vue skills.
 - Vue router
 - Vuex state management
 - Vue forms
-- backend communication with axios
-- animation and route transition
-- vee validation and zod for form validation
-- authentication and route guards
+- Backend communication with axios
+- Animation and route transition
+- Vee validation and zod for form validation
+- Authentication and route guards
+- Create general purpose components
+- Dynamic components loading with v-slot
+- Lazy load compoonents with async components
