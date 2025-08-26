@@ -13,8 +13,8 @@ export default {
     CoachForm,
   },
   methods: {
-    saveData(coachData) {
-      this.$store.dispatch('coaches/registerCoach', coachData);
+    async saveData(coachData) {
+      await this.$store.dispatch('coaches/registerCoach', coachData);
       const redirectUrl = this.$route.query.redirect || '/coaches';
 
       this.$router.replace(redirectUrl);
