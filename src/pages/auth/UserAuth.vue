@@ -46,7 +46,7 @@ export default {
         .min(1, 'please enter your email'),
       password: z
         .string({ message: 'please enter your password' })
-        .min(1, 'please enter your password'),
+        .min(6, 'please enter a password with minimum 6 characters'),
     });
 
     return {
@@ -66,6 +66,12 @@ export default {
   methods: {
     submitForm(data) {
       console.log(data);
+
+      if (this.mode == 'login') {
+        //...
+      } else {
+        this.$store.dispatch('signup', data);
+      }
     },
     toggleMode() {
       if (this.mode == 'login') {
