@@ -59,9 +59,8 @@ export default {
       );
       if (coach) {
         ctx.commit('coaches/setUserIsCoach', true);
+        localStorage.setItem('isCoach', true);
       }
-
-      localStorage.setItem('isCoach', coach);
     },
     async autoLogin(ctx) {
       const token = localStorage.getItem('token');
