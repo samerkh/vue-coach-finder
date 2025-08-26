@@ -81,12 +81,11 @@ export default {
       this.isLoading = true;
       try {
         if (this.mode == 'login') {
-          //...
+          await this.$store.dispatch('login', data);
         } else {
           await this.$store.dispatch('signup', data);
         }
       } catch (e) {
-        console.log(e);
         this.error = e;
       }
       this.isLoading = false;
