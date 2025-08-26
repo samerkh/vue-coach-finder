@@ -27,7 +27,7 @@ const router = createRouter({
     {
       path: '/register',
       component: () => import('./pages/coaches/CoachRegister.vue'),
-      meta: { requiresAuth: true, requiresNotCoach: false },
+      meta: { requiresAuth: true, requiresNotCoach: true },
     },
     {
       path: '/requests',
