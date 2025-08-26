@@ -61,7 +61,7 @@ export default {
         ctx.commit('coaches/setUserIsCoach', true);
       }
     },
-    autoLogin(ctx) {
+    async autoLogin(ctx) {
       const token = localStorage.getItem('token');
       const userId = localStorage.getItem('userId');
       const tokenExpiration = localStorage.getItem('tokenExpiration');
@@ -80,6 +80,11 @@ export default {
         token,
         userId,
       });
+
+      const coach = await ctx.dispatch('coaches/getCoachDetails', userId);
+      if (coach) {
+        ctx.commit('coaches/setUserIsCoach', true);
+      }
     },
     logout(ctx) {
       localStorage.removeItem('token');
