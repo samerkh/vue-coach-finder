@@ -63,13 +63,13 @@ router.beforeEach((to, _, next) => {
   const isCoach = store.getters['coaches/isCoach'];
 
   if (to.meta.requiresAuth && !isLoggedIn) {
-    next('/auth/login');
+    next({ path: '/auth/login', query: { redirect: to.fullPath } });
   } else if (to.meta.requiresUnauth && isLoggedIn) {
-    next('/coaches');
+    next({ path: '/coaches' });
   } else if (to.meta.requiresCoach && !isCoach) {
-    next('/coaches');
+    next({ path: '/register', query: { redirect: to.fullPath } });
   } else if (to.meta.requiresNotCoach && isCoach) {
-    next('/coaches');
+    next({ path: '/requests' });
   } else {
     next();
   }
