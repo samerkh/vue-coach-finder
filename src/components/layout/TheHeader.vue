@@ -9,7 +9,7 @@
         <li v-if="!isLoggedIn">
           <router-link to="/auth/login">Login</router-link>
         </li>
-        <li v-else>
+        <li v-else-if="isCoach">
           <router-link to="/requests">Requests</router-link>
         </li>
       </ul>
@@ -22,6 +22,9 @@ export default {
   computed: {
     isLoggedIn() {
       return this.$store.getters.isAuthenticated;
+    },
+    isCoach() {
+      return this.$store.getters['coaches/isCoach'];
     },
   },
 };

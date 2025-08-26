@@ -42,6 +42,13 @@ export default {
         userId: res.data.localId,
         tokenExpiration: res.data.expiresIn,
       });
+      const coach = await ctx.dispatch(
+        'coaches/getCoachDetails',
+        res.data.localId
+      );
+      if (coach) {
+        ctx.commit('coaches/setUserIsCoach');
+      }
     },
   },
 };

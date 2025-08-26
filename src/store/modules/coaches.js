@@ -77,9 +77,13 @@ export default {
       context.commit('setLastFetched');
     },
     async loadCoachDetails(context, coachId) {
+      const res = await context.dispatch('getCoachDetails', coachId);
+      context.commit('setActiveCoach', res);
+    },
+    async getCoachDetails(_, coachId) {
       const url = `${baseURL}/coaches/${coachId}.json`;
       const res = await axios.get(url);
-      context.commit('setActiveCoach', res.data);
+      return res.data;
     },
   },
 };
