@@ -1,4 +1,3 @@
-import { defineAsyncComponent } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import store from './store/index.js';
 
@@ -11,38 +10,28 @@ const router = createRouter({
     },
     {
       path: '/coaches',
-      component: defineAsyncComponent(() =>
-        import('./pages/coaches/CoachesList.vue')
-      ),
+      component: () => import('./pages/coaches/CoachesList.vue'),
     },
     {
       path: '/coaches/:id',
-      component: defineAsyncComponent(() =>
-        import('./pages/coaches/CoachDetails.vue')
-      ),
+      component: () => import('./pages/coaches/CoachDetails.vue'),
       props: true,
       children: [
         {
           path: 'contact',
-          component: defineAsyncComponent(() =>
-            import('./pages/requests/ContactCoach.vue')
-          ),
+          component: () => import('./pages/requests/ContactCoach.vue'),
           props: true,
         },
       ],
     },
     {
       path: '/register',
-      component: defineAsyncComponent(() =>
-        import('./pages/coaches/CoachRegister.vue')
-      ),
+      component: () => import('./pages/coaches/CoachRegister.vue'),
       meta: { requiresAuth: true, requiresNotCoach: false },
     },
     {
       path: '/requests',
-      component: defineAsyncComponent(() =>
-        import('./pages/requests/RequestsList.vue')
-      ),
+      component: () => import('./pages/requests/RequestsList.vue'),
       meta: { requiresAuth: true, requiresCoach: true },
     },
     {
@@ -51,15 +40,13 @@ const router = createRouter({
     },
     {
       path: '/auth/:mode(login|signup)',
-      component: defineAsyncComponent(() =>
-        import('./pages/auth/UserAuth.vue')
-      ),
+      component: () => import('./pages/auth/UserAuth.vue'),
       meta: { requiresUnauth: true },
       props: true,
     },
     {
       path: '/:notFound(.*)',
-      component: defineAsyncComponent(() => import('./pages/NotFound.vue')),
+      component: () => import('./pages/NotFound.vue'),
     },
   ],
 });
