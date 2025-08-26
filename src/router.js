@@ -40,7 +40,12 @@ const router = createRouter({
     },
     {
       path: '/auth',
+      redirect: '/auth/login',
+    },
+    {
+      path: '/auth/:mode(login|signup)',
       component: UserAuth,
+      props: true,
     },
     {
       path: '/:notFound(.*)',

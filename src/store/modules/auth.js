@@ -29,7 +29,6 @@ export default {
         ...data,
         returnSecureToke: true,
       });
-      console.log(res.data);
       ctx.commit('setUser', {
         token: res.data.idToken,
         userId: res.data.localId,

@@ -39,6 +39,7 @@ export default {
     Field,
     ErrorMessage,
   },
+  props: ['mode'],
   data() {
     const schema = z.object({
       email: z
@@ -52,7 +53,6 @@ export default {
     return {
       schema: toTypedSchema(schema),
       initialValues: { email: null, password: null },
-      mode: 'login',
     };
   },
   computed: {
@@ -75,9 +75,9 @@ export default {
     },
     toggleMode() {
       if (this.mode == 'login') {
-        this.mode = 'signup';
+        this.$router.replace('/auth/signup');
       } else {
-        this.mode = 'login';
+        this.$router.replace('/auth/login');
       }
     },
   },
