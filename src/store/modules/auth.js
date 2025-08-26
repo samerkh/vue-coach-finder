@@ -2,12 +2,13 @@ const apiKey = '';
 const url = `https://identitytoolkit.googleapis.com/v1/accounts`;
 import axios from 'axios';
 
+let timer;
+
 export default {
   state() {
     return {
       userId: null,
       token: null,
-      tokenExpiration: null,
     };
   },
   getters: {
@@ -25,7 +26,6 @@ export default {
     setUser(state, payload) {
       state.userId = payload.userId;
       state.token = payload.token;
-      state.tokenExpiration = payload.tokenExpiration;
     },
   },
   actions: {
@@ -38,13 +38,20 @@ export default {
         returnSecureToken: true,
       });
 
+      const expiresIn = +res.data.expiresIn * 1000;
+      const expirationDate = new Date().getTime() + expiresIn;
+
       localStorage.setItem('token', res.data.idToken);
       localStorage.setItem('userId', res.data.localId);
+      localStorage.setItem('tokenExpiration', expirationDate);
+
+      timer = setTimeout(() => {
+        ctx.dispatch('logout');
+      }, expiresIn);
 
       ctx.commit('setUser', {
         token: res.data.idToken,
         userId: res.data.localId,
-        tokenExpiration: res.data.expiresIn,
       });
       const coach = await ctx.dispatch(
         'coaches/getCoachDetails',
@@ -57,23 +64,35 @@ export default {
     autoLogin(ctx) {
       const token = localStorage.getItem('token');
       const userId = localStorage.getItem('userId');
-      if (token && userId) {
-        ctx.commit('setUser', {
-          token,
-          userId,
-          tokenExpiration: null,
-        });
-      }
+      const tokenExpiration = localStorage.getItem('tokenExpiration');
+
+      if (!token || !userId || !tokenExpiration) return;
+
+      const expiresIn = +tokenExpiration - new Date().getTime();
+
+      if (expiresIn <= 0) return;
+
+      timer = setTimeout(() => {
+        ctx.dispatch('logout');
+      }, expiresIn);
+
+      ctx.commit('setUser', {
+        token,
+        userId,
+      });
     },
     logout(ctx) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('userId');
+      localStorage.removeItem('tokenExpiration');
+
+      clearTimeout(timer);
+
       ctx.commit('setUser', {
         userId: null,
         token: null,
-        tokenExpiration: null,
       });
       ctx.commit('coaches/setUserIsCoach', false);
-      localStorage.removeItem('token');
-      localStorage.removeItem('userId');
     },
   },
 };
