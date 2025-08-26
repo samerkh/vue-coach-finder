@@ -2,7 +2,9 @@
 
 this is a simple project to practice my vue skills.
 
-## Skills and tools I used
+# Demo: https://find-coach-3000.web.app
+
+# Skills and tools I used
 
 - Vue with options api
 - Vue router
