@@ -1,7 +1,5 @@
 const apiKey = '';
 const url = `https://identitytoolkit.googleapis.com/v1/accounts`;
-const signupUrl = `${url}:signUp?key=${apiKey}`;
-const loginUrl = `${url}:signInWithPassword?key=${apiKey}`;
 import axios from 'axios';
 
 export default {
@@ -23,20 +21,12 @@ export default {
     },
   },
   actions: {
-    async login(ctx, data) {
-      const res = await axios.post(loginUrl, {
-        ...data,
-        returnSecureToke: true,
-      });
-      ctx.commit('setUser', {
-        token: res.data.idToken,
-        userId: res.data.localId,
-        tokenExpiration: res.data.expiresIn,
-      });
-    },
-    async signup(ctx, data) {
-      const res = await axios.post(signupUrl, {
-        ...data,
+    async auth(ctx, payload) {
+      const action =
+        payload.action == 'login' ? 'signInWithPassword' : 'signUp';
+      const authUrl = `${url}:${action}?key=${apiKey}`;
+      const res = await axios.post(authUrl, {
+        ...payload.data,
         returnSecureToke: true,
       });
       ctx.commit('setUser', {

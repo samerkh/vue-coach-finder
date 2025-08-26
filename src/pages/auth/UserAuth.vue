@@ -80,11 +80,7 @@ export default {
     async submitForm(data) {
       this.isLoading = true;
       try {
-        if (this.mode == 'login') {
-          await this.$store.dispatch('login', data);
-        } else {
-          await this.$store.dispatch('signup', data);
-        }
+        await this.$store.dispatch('auth', { action: this.mode, data });
       } catch (e) {
         this.error = e;
       }
