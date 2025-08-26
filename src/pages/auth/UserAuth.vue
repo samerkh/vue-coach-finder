@@ -1,31 +1,42 @@
 <template>
-  <base-card>
-    <Form
-      :validation-schema="schema"
-      :initial-values="initialValues"
-      @submit="submitForm"
-    >
-      <div class="form-control">
-        <label for="email">Email</label>
-        <Field id="email" name="email" type="email" validate-on-input />
-        <ErrorMessage name="email" class="error" />
-      </div>
-      <div class="form-control">
-        <label for="password">Password</label>
-        <Field
-          id="password"
-          name="password"
-          type="password"
-          validate-on-input
-        />
-        <ErrorMessage name="password" class="error" />
-      </div>
-      <base-button>{{ submitButtonCaption }}</base-button>
-      <base-button type="button" mode="flat" @click="toggleMode">
-        {{ switchButtonCaption }}
-      </base-button>
-    </Form>
-  </base-card>
+  <div>
+    <base-dialog :show="!!error" :title="error?.name" @close="handleError">
+      <p>
+        {{ error?.message ?? '' }}:
+        {{ error?.response?.data?.error?.message ?? 'unkown error' }}
+      </p>
+    </base-dialog>
+    <base-dialog fixed :show="isLoading" title="Authenticating...">
+      <base-spinner></base-spinner>
+    </base-dialog>
+    <base-card>
+      <Form
+        :validation-schema="schema"
+        :initial-values="initialValues"
+        @submit="submitForm"
+      >
+        <div class="form-control">
+          <label for="email">Email</label>
+          <Field id="email" name="email" type="email" validate-on-input />
+          <ErrorMessage name="email" class="error" />
+        </div>
+        <div class="form-control">
+          <label for="password">Password</label>
+          <Field
+            id="password"
+            name="password"
+            type="password"
+            validate-on-input
+          />
+          <ErrorMessage name="password" class="error" />
+        </div>
+        <base-button>{{ submitButtonCaption }}</base-button>
+        <base-button type="button" mode="flat" @click="toggleMode">
+          {{ switchButtonCaption }}
+        </base-button>
+      </Form>
+    </base-card>
+  </div>
 </template>
 
 <script>
@@ -53,6 +64,8 @@ export default {
     return {
       schema: toTypedSchema(schema),
       initialValues: { email: null, password: null },
+      isLoading: false,
+      error: null,
     };
   },
   computed: {
@@ -64,14 +77,19 @@ export default {
     },
   },
   methods: {
-    submitForm(data) {
-      console.log(data);
-
-      if (this.mode == 'login') {
-        //...
-      } else {
-        this.$store.dispatch('signup', data);
+    async submitForm(data) {
+      this.isLoading = true;
+      try {
+        if (this.mode == 'login') {
+          //...
+        } else {
+          await this.$store.dispatch('signup', data);
+        }
+      } catch (e) {
+        console.log(e);
+        this.error = e;
       }
+      this.isLoading = false;
     },
     toggleMode() {
       if (this.mode == 'login') {
@@ -79,6 +97,9 @@ export default {
       } else {
         this.$router.replace('/auth/login');
       }
+    },
+    handleError() {
+      this.error = null;
     },
   },
 };
