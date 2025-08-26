@@ -40,8 +40,8 @@ export default {
     registerCoach(state, payload) {
       state.coaches.push(payload);
     },
-    setUserIsCoach(state) {
-      state.userIsCoach = true;
+    setUserIsCoach(state, isCoach) {
+      state.userIsCoach = isCoach;
     },
     setActiveCoach(state, payload) {
       state.activeCoach = payload;
@@ -62,7 +62,7 @@ export default {
         ...res.data,
         id: userId,
       });
-      context.commit('setUserIsCoach');
+      context.commit('setUserIsCoach', true);
     },
     async loadCoaches(context, forceUpdate) {
       if (!forceUpdate && !context.getters.shouldUpdate) return;

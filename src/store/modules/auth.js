@@ -47,8 +47,16 @@ export default {
         res.data.localId
       );
       if (coach) {
-        ctx.commit('coaches/setUserIsCoach');
+        ctx.commit('coaches/setUserIsCoach', true);
       }
+    },
+    logout(ctx) {
+      ctx.commit('setUser', {
+        userId: null,
+        token: null,
+        tokenExpiration: null,
+      });
+      ctx.commit('coaches/setUserIsCoach', false);
     },
   },
 };

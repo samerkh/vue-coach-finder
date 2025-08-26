@@ -6,10 +6,13 @@
       </h1>
       <ul>
         <li><router-link to="/coaches">Coaches</router-link></li>
-        <li v-if="!isLoggedIn">
+        <li v-if="isLoggedIn">
+          <base-button @click="logout">Logout</base-button>
+        </li>
+        <li v-else>
           <router-link to="/auth/login">Login</router-link>
         </li>
-        <li v-else-if="isCoach">
+        <li v-if="isLoggedIn && isCoach">
           <router-link to="/requests">Requests</router-link>
         </li>
       </ul>
@@ -25,6 +28,11 @@ export default {
     },
     isCoach() {
       return this.$store.getters['coaches/isCoach'];
+    },
+  },
+  methods: {
+    logout() {
+      this.$store.dispatch('logout');
     },
   },
 };
