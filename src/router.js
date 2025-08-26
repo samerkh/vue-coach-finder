@@ -61,7 +61,6 @@ const router = createRouter({
 router.beforeEach((to, _, next) => {
   const isLoggedIn = store.getters.isAuthenticated;
   const isCoach = store.getters['coaches/isCoach'];
-  console.log({ isLoggedIn, isCoach });
 
   if (to.meta.requiresAuth && !isLoggedIn) {
     next('/auth/login');

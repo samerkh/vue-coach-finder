@@ -37,6 +37,10 @@ export default {
         ...payload.data,
         returnSecureToken: true,
       });
+
+      localStorage.setItem('token', res.data.idToken);
+      localStorage.setItem('userId', res.data.localId);
+
       ctx.commit('setUser', {
         token: res.data.idToken,
         userId: res.data.localId,
@@ -50,6 +54,17 @@ export default {
         ctx.commit('coaches/setUserIsCoach', true);
       }
     },
+    autoLogin(ctx) {
+      const token = localStorage.getItem('token');
+      const userId = localStorage.getItem('userId');
+      if (token && userId) {
+        ctx.commit('setUser', {
+          token,
+          userId,
+          tokenExpiration: null,
+        });
+      }
+    },
     logout(ctx) {
       ctx.commit('setUser', {
         userId: null,
@@ -57,6 +72,8 @@ export default {
         tokenExpiration: null,
       });
       ctx.commit('coaches/setUserIsCoach', false);
+      localStorage.removeItem('token');
+      localStorage.removeItem('userId');
     },
   },
 };
