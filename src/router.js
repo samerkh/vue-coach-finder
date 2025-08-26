@@ -6,6 +6,7 @@ import CoachRegister from './pages/coaches/CoachRegister.vue';
 import NotFound from './pages/NotFound.vue';
 import ContactCoach from './pages/requests/ContactCoach.vue';
 import RequestsList from './pages/requests/RequestsList.vue';
+import store from './store/index.js';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -33,10 +34,12 @@ const router = createRouter({
     {
       path: '/register',
       component: CoachRegister,
+      meta: { requiresAuth: true, requiresNotCoach: false },
     },
     {
       path: '/requests',
       component: RequestsList,
+      meta: { requiresAuth: true, requiresCoach: true },
     },
     {
       path: '/auth',
@@ -45,6 +48,7 @@ const router = createRouter({
     {
       path: '/auth/:mode(login|signup)',
       component: UserAuth,
+      meta: { requiresUnauth: true },
       props: true,
     },
     {
@@ -52,6 +56,24 @@ const router = createRouter({
       component: NotFound,
     },
   ],
+});
+
+router.beforeEach((to, _, next) => {
+  const isLoggedIn = store.getters.isAuthenticated;
+  const isCoach = store.getters['coaches/isCoach'];
+  console.log({ isLoggedIn, isCoach });
+
+  if (to.meta.requiresAuth && !isLoggedIn) {
+    next('/auth/login');
+  } else if (to.meta.requiresUnauth && isLoggedIn) {
+    next('/coaches');
+  } else if (to.meta.requiresCoach && !isCoach) {
+    next('/coaches');
+  } else if (to.meta.requiresNotCoach && isCoach) {
+    next('/coaches');
+  } else {
+    next();
+  }
 });
 
 export default router;
